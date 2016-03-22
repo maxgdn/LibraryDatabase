@@ -1,0 +1,60 @@
+group 'me.vandenmax.db'
+version '1.0-SNAPSHOT'
+
+//apply plugin: 'java'
+//apply plugin: 'application'
+apply from: "http://dl.bintray.com/content/shemnon/javafx-gradle/8.1.1/javafx.plugin"
+
+//mainClassName = "sample.Main"
+//sourceCompatibility = 1.8
+
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+        resources {
+            srcDir 'src/main/resources'
+        }
+    }
+}
+
+javafx {
+    // Points to JDK and its JavaFX libraries, also declares target runtime JDK
+//    javaRuntime = '/Library/Java/JavaVirtualMachines/jdk1.7.0_40.jdk'
+//    javaRuntime = 'C:\\Program Files\\Java\\jdk1.8.0_45.jdk'
+
+    // Application name and ID presented by target OS
+    appName 'Goyim!'
+    mainClass 'sample.Main'
+    copyright = ""
+    description = ""
+    version = "0.1.0"
+    licenseType = ""
+    vendor = ""
+
+    // JVM arguments, system properties, application command line arguments
+//    jvmArgs = ['-XX:+AggressiveOpts', '-XX:CompileThreshold=1']
+    jvmArgs = []
+//    systemProperties = ['prism.disableRegionCaching':'true']
+//    arguments = ['-l', '--fast']
+
+    verbose = true
+}
+
+sourceSets.main.resources {
+    srcDirs = ["src/main/resources"]; //assume that your java classes are inside this path
+    exclude "**/*.java"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.avaje.ebeanorm:avaje-ebeanorm:7.1.1'
+    compile 'org.avaje.ebeanorm:avaje-ebeanorm-agent:4.9.1'
+    compile 'org.avaje:avaje-agentloader:2.1.2'
+    compile 'com.h2database:h2:1.4.186'
+}

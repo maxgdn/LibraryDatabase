@@ -1,0 +1,20 @@
+<component name="libraryTable">
+  <library name="slf4j-simple-1.7.18">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Desktop/Programming/slf4j-simple-1.7.18.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/Programming/slf4j-api-1.7.18.jar!/" />
+      <root url="file://$USER_HOME$/Desktop/Programming" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="file://$USER_HOME$/Desktop/Programming/db-derby-10.12.1.1-bin/db-derby-10.12.1.1-bin/javadoc" />
+      <root url="file://$USER_HOME$/Desktop/Programming/jaunt1.0.0.2/javadocs" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/Desktop/Programming/slf4j-simple-1.7.18-sources.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/Programming/slf4j-api-1.7.18-sources.jar!/" />
+      <root url="file://$USER_HOME$/Desktop/Programming" />
+    </SOURCES>
+    <jarDirectory url="file://$USER_HOME$/Desktop/Programming" recursive="false" />
+    <jarDirectory url="file://$USER_HOME$/Desktop/Programming" recursive="false" type="SOURCES" />
+  </library>
+</component>

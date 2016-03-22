@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Options">
+   <children>
+      <Button fx:id="closeButton" layoutX="961.0" layoutY="653.0" mnemonicParsing="false" onAction="#closeApplication" text="Close" />
+      <Button fx:id="returnButton" layoutX="891.0" layoutY="653.0" mnemonicParsing="false" onAction="#goToApplication" text="Return" />
+      <Label fx:id="optionsLabel" layoutX="194.0" layoutY="94.0" prefHeight="17.0" prefWidth="276.0" text="Options" />
+      <TableView fx:id="studentTable" layoutX="491.0" layoutY="181.0" prefHeight="200.0" prefWidth="304.0">
+        <columns>
+          <TableColumn prefWidth="75.0" text="First Name" />
+          <TableColumn prefWidth="75.0" text="Last Name" />
+            <TableColumn prefWidth="153.0" text="ID" />
+        </columns>
+      </TableView>
+      <TextField fx:id="studentSearch" layoutX="491.0" layoutY="130.0" />
+      <Button fx:id="studentButton" layoutX="661.0" layoutY="130.0" mnemonicParsing="false" text="Search" />
+      <TableView fx:id="signInOutTable" layoutX="488.0" layoutY="480.0" prefHeight="200.0" prefWidth="304.0">
+         <columns>
+            <TableColumn prefWidth="150.0" text="Student" />
+            <TableColumn prefWidth="75.0" text="Time In" />
+            <TableColumn prefWidth="75.0" text="Time Out" />
+         </columns>
+      </TableView>
+      <TextField fx:id="signInOutSearch" layoutX="488.0" layoutY="424.0" />
+      <Button fx:id="signInOutButton" layoutX="661.0" layoutY="424.0" mnemonicParsing="false" text="Search" />
+   </children>
+</AnchorPane>

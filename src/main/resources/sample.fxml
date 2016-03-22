@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+
+<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <columnConstraints>
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+   </rowConstraints>
+   <children>
+      <AnchorPane fx:id="basePane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1024.0">
+         <children>
+            <AnchorPane fx:id="photoPane" layoutX="737.0" layoutY="22.0" prefHeight="225.0" prefWidth="180.0" />
+            <Label fx:id="welcomeLabel" layoutX="553.0" layoutY="108.0" prefHeight="17.0" prefWidth="153.0" text="Welcome" />
+            <Label fx:id="nameLabel" layoutX="538.0" layoutY="143.0" prefHeight="17.0" prefWidth="243.0" />
+            <Label layoutX="803.0" layoutY="674.0" prefHeight="17.0" prefWidth="46.0" text="Time:" />
+            <Label fx:id="clock" layoutX="843.0" layoutY="675.0" prefHeight="17.0" prefWidth="105.0" text="Label" />
+            <Button fx:id="swapButton" layoutX="256.0" layoutY="465.0" mnemonicParsing="false" onAction="#goToOptions" text="Change" />
+            <TextField fx:id="barcodeInput" layoutX="377.0" layoutY="104.0" />
+            <Label fx:id="signInLabel" layoutX="538.0" layoutY="160.0" prefHeight="17.0" prefWidth="243.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</GridPane>

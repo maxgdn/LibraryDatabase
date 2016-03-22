@@ -1,0 +1,15 @@
+.root {
+    -fx-background-image: url("photos/logo.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-position: center center;
+}
+
+.backGround{
+
+}
+
+.photoPane{
+    -fx-border-color:black;
+    -fx-background-color: white;
+}

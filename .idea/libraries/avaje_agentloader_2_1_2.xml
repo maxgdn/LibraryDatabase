@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="avaje-agentloader-2.1.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Desktop/Programming/avaje-agentloader-2.1.2.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/Programming/avaje-ebeanorm-7.1.1.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/Programming/avaje-ebeanorm-agent-4.9.1.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/Programming/sqlite-jdbc-3.8.11.2.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="https://ebean-orm.github.io/apidocs/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/Desktop/Programming/sqlite-jdbc-3.8.11.2.jar!/" />
+    </SOURCES>
+  </library>
+</component>
