@@ -1,6 +1,0 @@
-03-22 00:54:26 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLException: Table "SIGN_IN" not found; SQL statement:
-alter table sign_in drop constraint if exists fk_sign_in_student_id [42102-186]
-03-22 00:54:39 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLException: Table "SIGN_IN" not found; SQL statement:
-SELECT t.* FROM PUBLIC.SIGN_IN t [42102-176]
