@@ -6,13 +6,10 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.JavaFXBuilderFactory;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
@@ -20,15 +17,12 @@ import sample.models.SignIn;
 import sample.models.Student;
 
 import java.io.IOException;
-import java.net.URL;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -69,18 +63,37 @@ public class Controller {
     public void initialize() {
         photoPane.getStyleClass().add("photoPane");
         setupComponents();
-        initTimedTasks();
         setPeriod();
-    }
 
+        // Set up a timer so our clock does clock stuff
+        DateFormat dateTimeInstance = SimpleDateFormat.getDateTimeInstance();
+        final Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0), event -> {
+            clock.setText(dateTimeInstance.format(new Date()));
+        }), new KeyFrame(Duration.seconds(1)));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
 
-    @FXML
-    private void updateBarcode() {
-            barcodeInput.positionCaret(0);
-            input = barcodeInput.getText();
-            checkBarcode(input);
-            barcodeInput.clear();
+        // Set up the barcode input
+        barcodeInput.setOnKeyReleased((ae) -> {
+            if (ae.getCode() == KeyCode.ENTER) {
+                input = barcodeInput.getText();
+                checkBarcode(input);
+                barcodeInput.clear();
+            }
+        });
 
+        // Update the current period
+        Timeline periodChecker = new Timeline(new KeyFrame(Duration.minutes(1), event -> {
+            if (setPeriod()) {
+                List<SignIn> all = SignIn.find.all();
+                all.stream().filter(signIn1 -> signIn1.timeIn.toLocalTime().isAfter(currentPeriod.endTime)).forEach(signIn1 -> {
+                    signIn1.timeOut = LocalDateTime.from(LocalDate.from(currentPeriod.endTime));
+                    signIn1.wasManual = true;
+                });
+            }
+        }));
+        periodChecker.setCycleCount(Animation.INDEFINITE);
+        periodChecker.play();
     }
 
     @FXML
@@ -92,68 +105,20 @@ public class Controller {
         Platform.runLater(() -> barcodeInput.requestFocus());
     }
 
-    public void setPeriod(){
+    public boolean setPeriod() {
         LocalTime localTime = LocalTime.now();
         for (int i = 0; i < Period.values().length; i++) {
             Period period = Period.values()[i];
-            if(localTime.isBefore(period.endTime)){
+            if (localTime.isBefore(period.endTime)) {
                 setCurrentPeriod(period);
-                break;
+                return true;
             }
         }
-        if(currentPeriod == null) {
+        if (currentPeriod == null) {
             setCurrentPeriod(Period.BEFORE_CLASS);
+            return true;
         }
-    }
-
-    public void initTimedTasks(){
-        //Recursive Tasks
-        Timeline timeline = new Timeline(new KeyFrame(
-                Duration.millis(1000),
-                ae -> {
-                    setupTime();
-                    openAdminCheck();
-                }));
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
-
-        Timeline timeline2;
-        timeline2 = new Timeline(new KeyFrame(
-                Duration.millis(5000),
-                ae -> updateBarcode()));
-        timeline2.setCycleCount(Animation.INDEFINITE);
-        timeline2.play();
-
-        Timeline periodChecker = new Timeline(new KeyFrame(
-                Duration.millis(120000),
-                ae -> setPeriod()));
-        periodChecker.setCycleCount(Animation.INDEFINITE);
-        periodChecker.play();
-
-        Timeline checkSignIn = new Timeline(new KeyFrame(
-                Duration.millis(9000),
-                ae -> checkSignIns()));
-        checkSignIn.setCycleCount(Animation.INDEFINITE);
-        checkSignIn.play();
-    }
-
-    private void checkSignIns() {
-        List<SignIn> all = SignIn.find.all();
-        all.stream().filter(signIn1 -> signIn1.timeIn.toLocalTime().isAfter(currentPeriod.endTime)).forEach(signIn1 -> {
-            signIn1.timeOut = LocalDateTime.from(LocalDate.from(currentPeriod.endTime));
-            signIn1.wasManual = true;
-        });
-    }
-
-    @FXML
-    public void setupTime() {
-        final DateFormat format = DateFormat.getInstance();
-        final Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            final Calendar cal = Calendar.getInstance();
-            clock.setText(format.format(cal.getTime()));
-        }));
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
+        return false;
     }
 
     @FXML
@@ -165,24 +130,10 @@ public class Controller {
     @FXML
     public void goToOptions() {
         try {
-            replaceSceneContent("options.fxml");
+            Util.replaceSceneContent("options.fxml");
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    private Parent replaceSceneContent(String fxml) throws Exception {
-        URL resource = this.getClass().getClassLoader().getResource(fxml);
-        Parent page = FXMLLoader.load(resource, null, new JavaFXBuilderFactory());
-        Scene scene = Main.stage.getScene();
-        if (scene == null) {
-            scene = new Scene(page, 700, 450);
-            Main.stage.setScene(scene);
-        } else {
-            Main.stage.getScene().setRoot(page);
-        }
-        Main.stage.sizeToScene();
-        return page;
     }
 
     private String checkBarcode(String studentInput) {
@@ -212,54 +163,41 @@ public class Controller {
         return true;
     }
 
-    public void openAdminCheck() {
-        if (Main.getBoolean()) {
-            try {
-                replaceSceneContent("password.fxml");
-            } catch (Exception ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-
     public void handleUserEntry() {
         ArrayList<String> queueList = new ArrayList<>();
         queueList.add(0, validInput);
-        if (!(queueList.size() >= 2)) {
+        if (queueList.size() >= 2) {
+            queueList.remove(0);
+        } else {
             loadPhotoPane();
             try {
                 findUserInMarkBook();
                 loadUserName();
 
-                Ebean.execute(()->{
+                Ebean.execute(() -> {
                     Student student = Student.find.where().eq("studentID", validInput).findUnique();
-                    if(student == null){
-                        student = newStudentEntry(firstName,lastName,Integer.parseInt(validInput));
+                    if (student == null) {
+                        student = newStudentEntry(firstName, lastName, Integer.parseInt(validInput));
                     }
                     SignIn signIn = SignIn.find.where().eq("student.id", student.id).orderBy("timeIn desc").setMaxRows(1).findUnique();
-                    if(signIn == null || signIn.timeOut != null){
+                    if (signIn == null || signIn.timeOut != null) {
                         newLibrarySignIn(student);
                         signInUpdate();
-                    } else{
+                    } else {
                         signIn.timeOut = LocalDateTime.now();
                         signIn.save();
                         signIn.student.save();
                         signOutUpdate();
                     }
                 });
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Timeline displayTimeOut = new Timeline(new KeyFrame(
-                    Duration.millis(5000),
-                    ae -> {
-                        resetDisplay();
-                        queueList.remove(0);
-                    }));
-            displayTimeOut.play();
-        } else {
-            queueList.remove(0);
+
+            new Timeline(new KeyFrame(Duration.seconds(5), event -> {
+                resetDisplay();
+                queueList.remove(0);
+            })).play();
         }
     }
 
@@ -267,18 +205,19 @@ public class Controller {
         final DateFormat format = DateFormat.getInstance();
         final Calendar cal = Calendar.getInstance();
 
-        if(!(markBookMap.containsValue("Invalid"))) {
-            signInLabel.setText("Signed In at: "+ format.format(cal.getTime()));
+        if (!(markBookMap.containsValue("Invalid"))) {
+            signInLabel.setText("Signed In at: " + format.format(cal.getTime()));
         } else {
-            signInLabel.setText("Invalid entry at: "+ format.format(cal.getTime()));
+            signInLabel.setText("Invalid entry at: " + format.format(cal.getTime()));
         }
 
     }
-    private void signOutUpdate(){
+
+    private void signOutUpdate() {
         final DateFormat format = DateFormat.getInstance();
         final Calendar cal = Calendar.getInstance();
-            signInLabel.setText("Signed Out at: "+ format.format(cal.getTime()));
-            welcomeLabel.setText("Goodbye!");
+        signInLabel.setText("Signed Out at: " + format.format(cal.getTime()));
+        welcomeLabel.setText("Goodbye!");
     }
 
     private void resetDisplay() {
@@ -298,7 +237,7 @@ public class Controller {
 
     }
 
-    private Student newStudentEntry(String prFirstName,String prLastName, int prStudentID){
+    private Student newStudentEntry(String prFirstName, String prLastName, int prStudentID) {
         Student student = new Student();
         student.firstName = prFirstName;
         student.lastName = prLastName;
@@ -306,14 +245,15 @@ public class Controller {
         student.save();
         return student;
     }
-    private void newLibrarySignIn(Student student){
+
+    private void newLibrarySignIn(Student student) {
         SignIn signIn = new SignIn();
         signIn.timeIn = LocalDateTime.now();
         signIn.student = student;
         signIn.save();
     }
 
-    private void loadUserName(){
+    private void loadUserName() {
         nameLabel.setText(firstName + ", " + lastName);
     }
 

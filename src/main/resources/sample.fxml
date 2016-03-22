@@ -22,7 +22,7 @@
             <Label fx:id="welcomeLabel" layoutX="553.0" layoutY="108.0" prefHeight="17.0" prefWidth="153.0" text="Welcome" />
             <Label fx:id="nameLabel" layoutX="538.0" layoutY="143.0" prefHeight="17.0" prefWidth="243.0" />
             <Label layoutX="803.0" layoutY="674.0" prefHeight="17.0" prefWidth="46.0" text="Time:" />
-            <Label fx:id="clock" layoutX="843.0" layoutY="675.0" prefHeight="17.0" prefWidth="105.0" text="Label" />
+            <Label fx:id="clock" layoutX="843.0" layoutY="675.0" prefHeight="17.0" prefWidth="150.0" text="Label" />
             <Button fx:id="swapButton" layoutX="256.0" layoutY="465.0" mnemonicParsing="false" onAction="#goToOptions" text="Change" />
             <TextField fx:id="barcodeInput" layoutX="377.0" layoutY="104.0" />
             <Label fx:id="signInLabel" layoutX="538.0" layoutY="160.0" prefHeight="17.0" prefWidth="243.0" />

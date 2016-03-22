@@ -3,8 +3,6 @@ package sample;
 import com.avaje.ebean.EbeanServerFactory;
 import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,7 +12,6 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.util.Duration;
 import org.avaje.agentloader.AgentLoader;
 
 public class Main extends Application {
@@ -42,15 +39,7 @@ public class Main extends Application {
 //        primaryStage.setOnCloseRequest(Event::consume);
         primaryStage.getScene().getAccelerators().put(
                 new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN),
-                () -> {
-                    setBoolean(true);
-                    if(statusBool) {
-                        Timeline timeline = new Timeline(new KeyFrame(
-                                Duration.millis(3000),
-                                ae -> setBoolean(false)));
-                        timeline.play();
-                    }
-                }
+                () -> Util.replaceSceneContent("password.fxml")
         );
         primaryStage.initStyle(StageStyle.UTILITY);
         primaryStage.centerOnScreen();

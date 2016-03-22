@@ -41,7 +41,7 @@ public class PassPage {
     @FXML
     public void goToOptions() {
         try {
-            replaceSceneContent("options.fxml");
+            Util.replaceSceneContent("options.fxml");
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -50,24 +50,9 @@ public class PassPage {
     @FXML
     public void goToApplication() {
         try {
-            replaceSceneContent("sample.fxml");
+            Util.replaceSceneContent("sample.fxml");
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-
-    private Parent replaceSceneContent(String fxml) throws Exception {
-        URL resource = this.getClass().getClassLoader().getResource(fxml);
-        Parent page = FXMLLoader.load(resource, null, new JavaFXBuilderFactory());
-        Scene scene = Main.stage.getScene();
-        if (scene == null) {
-            scene = new Scene(page, 700, 450);
-            Main.stage.setScene(scene);
-        } else {
-            Main.stage.getScene().setRoot(page);
-        }
-        Main.stage.sizeToScene();
-        return page;
     }
 }
