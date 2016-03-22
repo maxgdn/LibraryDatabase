@@ -28,11 +28,7 @@ public class PassPage {
 
     @FXML
     public void initialize(){
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run(){ passField.requestFocus();
-            }
-        });
+        Platform.runLater(() -> passField.requestFocus());
 
     }
 

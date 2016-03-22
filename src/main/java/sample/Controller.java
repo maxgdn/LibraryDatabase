@@ -5,8 +5,6 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
@@ -92,12 +90,7 @@ public class Controller {
         nameLabel.setText("");
         welcomeLabel.setFont(FONT);
         nameLabel.setFont(Font.font(16));
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                barcodeInput.requestFocus();
-            }
-        });
+        Platform.runLater(() -> barcodeInput.requestFocus());
     }
 
     public void setPeriod(){
@@ -129,49 +122,38 @@ public class Controller {
         Timeline timeline2;
         timeline2 = new Timeline(new KeyFrame(
                 Duration.millis(5000),
-                ae -> {
-                    updateBarcode();
-                }));
+                ae -> updateBarcode()));
         timeline2.setCycleCount(Animation.INDEFINITE);
         timeline2.play();
 
         Timeline periodChecker = new Timeline(new KeyFrame(
                 Duration.millis(120000),
-                ae -> {
-                    setPeriod();
-                }));
+                ae -> setPeriod()));
         periodChecker.setCycleCount(Animation.INDEFINITE);
         periodChecker.play();
 
         Timeline checkSignIn = new Timeline(new KeyFrame(
                 Duration.millis(9000),
-                ae -> {
-                   checkSignIns();
-                }));
+                ae -> checkSignIns()));
         checkSignIn.setCycleCount(Animation.INDEFINITE);
         checkSignIn.play();
     }
 
     private void checkSignIns() {
         List<SignIn> all = SignIn.find.all();
-        for (SignIn signIn1: all) {
-            if(signIn1.timeIn.toLocalTime().isAfter(currentPeriod.endTime)){
-                signIn1.timeOut = LocalDateTime.from(LocalDate.from(currentPeriod.endTime));
-                signIn1.wasManual = true;
-                printSignIns();
-            }
-        }
+        all.stream().filter(signIn1 -> signIn1.timeIn.toLocalTime().isAfter(currentPeriod.endTime)).forEach(signIn1 -> {
+            signIn1.timeOut = LocalDateTime.from(LocalDate.from(currentPeriod.endTime));
+            signIn1.wasManual = true;
+            printSignIns();
+        });
     }
 
     @FXML
     public void setupTime() {
         final DateFormat format = DateFormat.getInstance();
-        final Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                final Calendar cal = Calendar.getInstance();
-                clock.setText(format.format(cal.getTime()));
-            }
+        final Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            final Calendar cal = Calendar.getInstance();
+            clock.setText(format.format(cal.getTime()));
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
@@ -245,7 +227,7 @@ public class Controller {
     }
 
     public void handleUserEntry() {
-        ArrayList<String> queueList = new ArrayList();
+        ArrayList<String> queueList = new ArrayList<>();
         queueList.add(0, validInput);
         System.out.println(queueList.toString());
         if (!(queueList.size() >= 2)) {

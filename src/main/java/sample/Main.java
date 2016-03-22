@@ -9,7 +9,7 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
+import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
@@ -21,7 +21,6 @@ import javafx.scene.input.KeyCombination;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import org.avaje.agentloader.AgentLoader;
 import sample.models.Student;
@@ -41,7 +40,6 @@ public class Main extends Application {
     public static boolean statusBool = false;
     private ObservableList<ObservableList> data;
     private TableView tableview;
-    private static EbeanServer server; // could also pass null since h2 is default db in ebean.properties
 
 
     public static void main(String[] args) throws Exception {
@@ -61,25 +59,16 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         scene.getStylesheets().add(getClass().getClassLoader().getResource("css/MainCS.css").toExternalForm());
         Platform.setImplicitExit(false);
-        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent event) {
-                event.consume();
-            }
-        });
+        primaryStage.setOnCloseRequest(Event::consume);
         primaryStage.getScene().getAccelerators().put(
                 new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN),
-                new Runnable() {
-                    @Override public void run() {
-                        setBoolean(true);
-                        if(statusBool == true) {
-                            Timeline timeline = new Timeline(new KeyFrame(
-                                    Duration.millis(3000),
-                                    ae -> {
-                                        setBoolean(false);
-                                    }));
-                            timeline.play();
-                        }
+                () -> {
+                    setBoolean(true);
+                    if(statusBool) {
+                        Timeline timeline = new Timeline(new KeyFrame(
+                                Duration.millis(3000),
+                                ae -> setBoolean(false)));
+                        timeline.play();
                     }
                 }
         );
@@ -160,7 +149,7 @@ public class Main extends Application {
 
         // create the EbeanServer instance
 
-        server = EbeanServerFactory.create(serverConfig);
+        EbeanServer server = EbeanServerFactory.create(serverConfig);
     }
 
     public static Main getInstance() {
