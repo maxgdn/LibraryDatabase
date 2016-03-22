@@ -186,7 +186,6 @@ public class Controller {
                     } else {
                         signIn.timeOut = LocalDateTime.now();
                         signIn.save();
-                        signIn.student.save();
                         signOutUpdate();
                     }
                 });
