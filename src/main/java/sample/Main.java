@@ -14,6 +14,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.avaje.agentloader.AgentLoader;
 
+import java.io.File;
+
 public class Main extends Application {
 
     public static Stage stage;
@@ -66,7 +68,9 @@ public class Main extends Application {
         serverConfig.setDataSourceConfig(sqliteDB);
 
         // set DDL options...
-        serverConfig.setDdlRun(true);
+        if (!new File("mydb.db").exists()) {
+            serverConfig.setDdlRun(true);
+        }
         serverConfig.setDefaultServer(true);
 
         //Specify jar to search for entity beans
