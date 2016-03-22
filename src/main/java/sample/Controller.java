@@ -78,7 +78,6 @@ public class Controller {
     private void updateBarcode() {
             barcodeInput.positionCaret(0);
             input = barcodeInput.getText();
-            System.out.println(input.length());
             checkBarcode(input);
             barcodeInput.clear();
 
@@ -105,7 +104,6 @@ public class Controller {
         if(currentPeriod == null) {
             setCurrentPeriod(Period.BEFORE_CLASS);
         }
-        System.out.println(currentPeriod.endTime);
     }
 
     public void initTimedTasks(){
@@ -144,7 +142,6 @@ public class Controller {
         all.stream().filter(signIn1 -> signIn1.timeIn.toLocalTime().isAfter(currentPeriod.endTime)).forEach(signIn1 -> {
             signIn1.timeOut = LocalDateTime.from(LocalDate.from(currentPeriod.endTime));
             signIn1.wasManual = true;
-            printSignIns();
         });
     }
 
@@ -194,7 +191,6 @@ public class Controller {
                 barcodeInput.clear();
                 return invalidInput;
             } else {
-                System.out.println("Good Barcode: " + studentInput);
                 validInput = studentInput;
                 handleUserEntry();
                 return validInput;
@@ -229,7 +225,6 @@ public class Controller {
     public void handleUserEntry() {
         ArrayList<String> queueList = new ArrayList<>();
         queueList.add(0, validInput);
-        System.out.println(queueList.toString());
         if (!(queueList.size() >= 2)) {
             loadPhotoPane();
             try {
@@ -317,35 +312,9 @@ public class Controller {
         signIn.student = student;
         signIn.save();
     }
-    private void printStudents(){
-        List<Student> all = Student.find.all();
-        for (Student student1 : all) {
-            System.out.println(student1.firstName);
-            System.out.println(student1.lastName);
-            System.out.println(student1.id);
-            System.out.println(student1.studentID);
-        }
-    }
-
-    private void printSignIns() {
-    List<SignIn> all = SignIn.find.all();
-        for(SignIn signin1 : all){
-            System.out.println(signin1.id);
-            System.out.println(signin1.student);
-            System.out.println(signin1.timeIn);
-            System.out.println(signin1.timeOut);
-            System.out.println(signin1.wasManual);
-        }
-    }
-
 
     private void loadUserName(){
         nameLabel.setText(firstName + ", " + lastName);
-    }
-
-
-    public Period getCurrentPeriod() {
-        return currentPeriod;
     }
 
     public void setCurrentPeriod(Period inputedPeriod) {

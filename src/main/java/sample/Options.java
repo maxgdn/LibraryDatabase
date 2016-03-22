@@ -52,7 +52,6 @@ public class Options {
 
     @FXML
     public void closeApplication(){
-        System.out.println("Shuting Down");
         Platform.exit();
         System.exit(0);
     }
