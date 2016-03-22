@@ -24,8 +24,6 @@ public class PassPage {
     @FXML
     PasswordField passField;
 
-    private String pass = "password";
-
     @FXML
     public void initialize(){
         Platform.runLater(() -> passField.requestFocus());
@@ -35,7 +33,7 @@ public class PassPage {
     @FXML
     public void checkPassword(){
         String input = passField.getText().toLowerCase();
-        if(input.equals(pass)){
+        if(input.equals(Config.PASSWORD)){
             goToOptions();
         }
     }

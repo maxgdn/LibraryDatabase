@@ -31,9 +31,6 @@ import java.util.List;
 
 public class Main extends Application {
 
-    private static final int PREF_HEIGHT = 720;
-    private static final int PREF_WIDTH = 1024;
-
     private Parent root = null;
     private static Main instance;
     public static Stage stage;
@@ -41,7 +38,6 @@ public class Main extends Application {
     public static boolean statusBool = false;
     private ObservableList<ObservableList> data;
     private TableView tableview;
-
 
     public static void main(String[] args) throws Exception {
         if (!AgentLoader.loadAgentFromClasspath("avaje-ebeanorm-agent", "debug=1;packages=sample.models.*")) {
@@ -55,8 +51,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("sample.fxml"));
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-        primaryStage.setTitle("Library Sign-In");
-        Scene scene = new Scene(root, PREF_WIDTH, PREF_HEIGHT);
+        primaryStage.setTitle(Config.WINDOW_TITLE);
+        Scene scene = new Scene(root, Config.PREF_WIDTH, Config.PREF_HEIGHT);
         primaryStage.setScene(scene);
         scene.getStylesheets().add(getClass().getClassLoader().getResource("css/MainCS.css").toExternalForm());
         Platform.setImplicitExit(false);
