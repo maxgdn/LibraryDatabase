@@ -57,4 +57,5 @@ dependencies {
     compile 'org.avaje.ebeanorm:avaje-ebeanorm-agent:4.9.1'
     compile 'org.avaje:avaje-agentloader:2.1.2'
     compile 'com.h2database:h2:1.4.186'
+    compile 'org.xerial:sqlite-jdbc:3.8.11.2'
 }

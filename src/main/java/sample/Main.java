@@ -6,8 +6,6 @@ import com.avaje.ebean.config.ServerConfig;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -40,8 +38,8 @@ public class Main extends Application {
         Scene scene = new Scene(root, Config.PREF_WIDTH, Config.PREF_HEIGHT);
         primaryStage.setScene(scene);
         scene.getStylesheets().add(getClass().getClassLoader().getResource("css/MainCS.css").toExternalForm());
-        Platform.setImplicitExit(false);
-        primaryStage.setOnCloseRequest(Event::consume);
+//        Platform.setImplicitExit(false);
+//        primaryStage.setOnCloseRequest(Event::consume);
         primaryStage.getScene().getAccelerators().put(
                 new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN),
                 () -> {
@@ -56,7 +54,8 @@ public class Main extends Application {
         );
         primaryStage.initStyle(StageStyle.UTILITY);
         primaryStage.centerOnScreen();
-        primaryStage.setResizable(false);
+//        primaryStage.setResizable(false);
+//        primaryStage.setFullScreen(true);
         Main.stage = primaryStage;
         currentScene = scene;
         //uncomment on final
@@ -66,19 +65,18 @@ public class Main extends Application {
 
     public static void eBeanInit(){
         ServerConfig serverConfig = new ServerConfig();
-        serverConfig.setName("h2");
+        serverConfig.setName("sqlite");
 
         //Define datasource parameters
-        DataSourceConfig h2Db = new DataSourceConfig();
-        h2Db.setDriver("org.h2.Driver");
-        h2Db.setUsername("username");
-        h2Db.setPassword("");
-        h2Db.setUrl("jdbc:h2:./h2database;CREATE=true;AUTO_RECONNECT=TRUE;DB_CLOSE_DELAY=-1");
-        h2Db.setHeartbeatSql("select 1");
-        serverConfig.setDataSourceConfig(h2Db);
+        DataSourceConfig sqliteDB = new DataSourceConfig();
+        sqliteDB.setDriver("org.sqlite.JDBC");
+        sqliteDB.setUsername("");
+        sqliteDB.setPassword("");
+        sqliteDB.setUrl("jdbc:sqlite:mydb.db");
+        sqliteDB.setIsolationLevel(1);
+        serverConfig.setDataSourceConfig(sqliteDB);
 
         // set DDL options...
-        serverConfig.setDdlGenerate(true);
         serverConfig.setDdlRun(true);
         serverConfig.setDefaultServer(true);
 
