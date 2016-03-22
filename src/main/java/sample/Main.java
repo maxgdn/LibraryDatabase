@@ -31,8 +31,9 @@ import java.util.List;
 
 public class Main extends Application {
 
-    static final int PREF_HEIGHT = 1024;
-    static final int PREF_WIDTH = 720;
+    private static final int PREF_HEIGHT = 720;
+    private static final int PREF_WIDTH = 1024;
+
     private Parent root = null;
     private static Main instance;
     public static Stage stage;
@@ -55,7 +56,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("sample.fxml"));
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         primaryStage.setTitle("Library Sign-In");
-        Scene scene = new Scene(root, PREF_HEIGHT, PREF_WIDTH);
+        Scene scene = new Scene(root, PREF_WIDTH, PREF_HEIGHT);
         primaryStage.setScene(scene);
         scene.getStylesheets().add(getClass().getClassLoader().getResource("css/MainCS.css").toExternalForm());
         Platform.setImplicitExit(false);
