@@ -86,9 +86,9 @@ public class Controller {
         Timeline periodChecker = new Timeline(new KeyFrame(Duration.minutes(1), event -> {
             if (setPeriod()) {
                 List<SignIn> all = SignIn.find.all();
-                all.stream().filter(signIn1 -> signIn1.timeIn.toLocalTime().isAfter(currentPeriod.endTime)).forEach(signIn1 -> {
-                    signIn1.timeOut = LocalDateTime.from(LocalDate.from(currentPeriod.endTime));
-                    signIn1.wasManual = true;
+                all.stream().filter(signIn1 -> signIn1.getTimeIn().toLocalTime().isAfter(currentPeriod.endTime)).forEach(signIn1 -> {
+                    signIn1.setTimeOut(LocalDateTime.from(LocalDate.from(currentPeriod.endTime)));
+                    signIn1.setWasManual(true);
                 });
             }
         }));
@@ -180,11 +180,11 @@ public class Controller {
                         student = newStudentEntry(firstName, lastName, Integer.parseInt(validInput));
                     }
                     SignIn signIn = SignIn.find.where().eq("student.id", student.id).orderBy("timeIn desc").setMaxRows(1).findUnique();
-                    if (signIn == null || signIn.timeOut != null) {
+                    if (signIn == null || signIn.getTimeOut() != null) {
                         newLibrarySignIn(student);
                         signInUpdate();
                     } else {
-                        signIn.timeOut = LocalDateTime.now();
+                        signIn.setTimeOut(LocalDateTime.now());
                         signIn.save();
                         signOutUpdate();
                     }
@@ -238,17 +238,17 @@ public class Controller {
 
     private Student newStudentEntry(String prFirstName, String prLastName, int prStudentID) {
         Student student = new Student();
-        student.firstName = prFirstName;
-        student.lastName = prLastName;
-        student.studentID = prStudentID;
+        student.setFirstName(prFirstName);
+        student.setLastName(prLastName);
+        student.setStudentID(prStudentID);
         student.save();
         return student;
     }
 
     private void newLibrarySignIn(Student student) {
         SignIn signIn = new SignIn();
-        signIn.timeIn = LocalDateTime.now();
-        signIn.student = student;
+        signIn.setTimeIn(LocalDateTime.now());
+        signIn.setStudent(student);
         signIn.save();
     }
 
