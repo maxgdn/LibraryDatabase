@@ -4,6 +4,8 @@ import com.avaje.ebean.EbeanServerFactory;
 import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -37,8 +39,8 @@ public class Main extends Application {
         Scene scene = new Scene(root, Config.PREF_WIDTH, Config.PREF_HEIGHT);
         primaryStage.setScene(scene);
         scene.getStylesheets().add(getClass().getClassLoader().getResource("css/MainCS.css").toExternalForm());
-//        Platform.setImplicitExit(false);
-//        primaryStage.setOnCloseRequest(Event::consume);
+        Platform.setImplicitExit(false);
+        primaryStage.setOnCloseRequest(Event::consume);
         primaryStage.getScene().getAccelerators().put(
                 new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN),
                 () -> Util.replaceSceneContent("password.fxml")
@@ -50,7 +52,7 @@ public class Main extends Application {
         Main.stage = primaryStage;
         currentScene = scene;
         //uncomment on final
-        //primaryStage.setAlwaysOnTop(true);
+       // primaryStage.setAlwaysOnTop(true);
         primaryStage.show();
     }
 
@@ -72,6 +74,7 @@ public class Main extends Application {
             serverConfig.setDdlRun(true);
         }
         serverConfig.setDefaultServer(true);
+
 
         //Specify jar to search for entity beans
         serverConfig.addPackage("sample.models");

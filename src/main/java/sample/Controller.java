@@ -16,6 +16,7 @@ import javafx.util.Duration;
 import sample.models.SignIn;
 import sample.models.Student;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -123,8 +124,14 @@ public class Controller {
 
     @FXML
     public void loadPhotoPane() {
-        photoPane.setStyle("-fx-background-image: url(\"/studentphotos/" + validInput + ".JPG\");\n" +
-                "-fx-background-size: contain;");
+        File f = new File("/studentphotos/" + validInput + ".JPG");
+        if(f.isFile() && !f.isDirectory()) {
+            photoPane.setStyle("-fx-background-image: url(\"/studentphotos/" + validInput + ".JPG\");\n" +
+                    "-fx-background-size: contain;");
+        } else {
+            photoPane.setStyle("-fx-background-image: url(\"/studentphotos/bealuser.JPG\");\n" +
+                    "-fx-background-size: contain;\n" + "-fx-background-size: 180 225;");
+        }
     }
 
     @FXML
@@ -247,9 +254,11 @@ public class Controller {
 
     private void newLibrarySignIn(Student student) {
         SignIn signIn = new SignIn();
+        student.signIns.add(signIn);
         signIn.setTimeIn(LocalDateTime.now());
         signIn.setStudent(student);
         signIn.save();
+        student.save();
     }
 
     private void loadUserName() {

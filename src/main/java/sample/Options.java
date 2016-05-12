@@ -10,7 +10,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import sample.models.Student;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,9 +51,25 @@ public class Options {
     optionsLabel.setFont(Controller.FONT);
     }
 
+    private void displayStudents(){
+        
+    }
+    private void displayTimeLogs(){
+
+    }
 
     @FXML
-    public void closeApplication(){
+    private void searchStudentDB(){
+        Student student = Student.find.where().eq("lastName", studentSearch.getText()).findUnique();
+        student.getFirstName();
+        student.getLastName();
+        student.getStudentID();
+    }
+    @FXML
+    public void closeApplication() throws IOException {
+        DBToFileWriter.terminateAllLiveClients();
+        DBToFileWriter.writeSignIns();
+        DBToFileWriter.writeStudents();
         Platform.exit();
         System.exit(0);
     }
