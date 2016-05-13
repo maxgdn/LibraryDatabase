@@ -82,7 +82,6 @@ public class Controller {
                 barcodeInput.clear();
             }
         });
-
         // Update the current period
         Timeline periodChecker = new Timeline(new KeyFrame(Duration.minutes(1), event -> {
             if (setPeriod()) {
