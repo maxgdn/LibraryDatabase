@@ -28,6 +28,7 @@ public class Main extends Application {
         if (!AgentLoader.loadAgentFromClasspath("avaje-ebeanorm-agent", "debug=1;packages=sample.models.*")) {
             System.out.println("avaje-ebeanorm-agent not found in classpath - not dynamically loaded");
         }
+
         eBeanInit();
         launch(args);
     }
@@ -81,12 +82,5 @@ public class Main extends Application {
 
         // create the EbeanServer instance
         EbeanServerFactory.create(serverConfig);
-    }
-
-    public static boolean getBoolean() {
-        return statusBool;
-    }
-    public void setBoolean(boolean bool) {
-        statusBool = bool;
     }
 }

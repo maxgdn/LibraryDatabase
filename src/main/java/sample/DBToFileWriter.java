@@ -17,10 +17,17 @@ import java.util.List;
  * Created by Max on 5/12/2016.
  */
 public class DBToFileWriter {
-    public static void writeSignIns() throws IOException {
+
+    private static LocalDate currentTime = LocalDate.now();
+    private static String folderName = "C:\\Users\\user\\textfilearea\\" + currentTime;
+
+    private static void initFolder(){
+         new File(folderName).mkdir();
+    }
+    private static void writeSignIns() throws IOException {
         Counter counter = new Counter();
-        LocalDate currentTime = LocalDate.now();
-        String fileName = "C:\\Users\\user\\textfilearea\\" + "Sign In's on " + currentTime + ".txt";
+
+        String fileName = folderName +"\\" + "Sign In's on " + currentTime + ".txt";
 
         File file = new File(fileName);
         FileWriter writer = new FileWriter(file);
@@ -37,12 +44,16 @@ public class DBToFileWriter {
         all.stream().forEach(signIn -> {
             try {
                 counter.increment();
-                writerBuffer.write("#" + counter.toString() + " Student: " +
-                        formatStudentID(String.valueOf(signIn.getStudent())) + " Time In: "
-                        + formatDisplayedTime(String.valueOf(signIn.getTimeIn())) + " Time Out: " + formatDisplayedTime(String.valueOf(signIn.getTimeOut()))
-                        + " Manual: " + String.valueOf(signIn.isWasManual()) + "\n");
+                if(getEntryDate(String.valueOf(signIn.getTimeOut())).equals(currentTime.toString())){
+                    writerBuffer.write("#" + counter.toString() + " Student: " +
+                            formatStudentID(String.valueOf(signIn.getStudent()))
+                            + " Time In: " + formatDisplayedTime(String.valueOf(signIn.getTimeIn()))
+                            + " Time Out: " + formatDisplayedTime(String.valueOf(signIn.getTimeOut()))
+                            + " Manual: " + String.valueOf(signIn.isWasManual())
+                            + "  Name: " +  signIn.getStudent().getFirstName()+"," + signIn.getStudent().getLastName() + "\n");
 
-                writerBuffer.newLine();
+                    writerBuffer.newLine();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -52,8 +63,8 @@ public class DBToFileWriter {
     }
 
     public static void writeStudents() throws IOException {
-        LocalDate currentTime = LocalDate.now();
-        String fileName = "C:\\Users\\user\\textfilearea\\" + "Students on " + currentTime + ".txt";
+
+        String fileName = folderName + "\\" + "Students on " + currentTime + ".txt";
 
         File file = new File(fileName);
         FileWriter writer = new FileWriter(file);
@@ -91,14 +102,20 @@ public class DBToFileWriter {
     }
 
     public static String formatDisplayedTime(String string) {
-        StringBuilder sb;
+                StringBuilder sb;
+                String[] array = string.split("T");
+                String s1 = array[0];
+                String s2 = array[1];
+                sb = new StringBuilder(s1);
+                s2 = s2.substring(0, 8);
+                string = String.valueOf(sb.append(" " + militaryToOrdinaryTime(s2)));
+                return string;
+    }
+
+    public static String getEntryDate(String string) {
         String[] array = string.split("T");
         String s1 = array[0];
-        String s2 = array[1];
-        sb = new StringBuilder(s1);
-        s2 = s2.substring(0,8);
-        string = String.valueOf(sb.append(" "+militaryToOrdinaryTime(s2)));
-        return string;
+        return s1;
     }
 
     public static String militaryToOrdinaryTime(String time) {

@@ -2,10 +2,6 @@ package sample;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.JavaFXBuilderFactory;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
@@ -13,7 +9,6 @@ import javafx.scene.control.TextField;
 import sample.models.Student;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -68,6 +63,7 @@ public class Options {
     @FXML
     public void closeApplication() throws IOException {
         DBToFileWriter.terminateAllLiveClients();
+        DBToFileWriter.initFolder();
         DBToFileWriter.writeSignIns();
         DBToFileWriter.writeStudents();
         Platform.exit();
@@ -76,25 +72,9 @@ public class Options {
     @FXML
     public void goToApplication() {
         try {
-            replaceSceneContent("sample.fxml");
+            Util.replaceSceneContent("sample.fxml");
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    private Parent replaceSceneContent(String fxml) throws Exception {
-        URL resource = this.getClass().getClassLoader().getResource(fxml);
-        Parent page = FXMLLoader.load(resource, null, new JavaFXBuilderFactory());
-        Scene scene = Main.stage.getScene();
-        if (scene == null) {
-            scene = new Scene(page, 700, 450);
-            Main.stage.setScene(scene);
-        } else {
-            Main.stage.getScene().setRoot(page);
-        }
-        Main.stage.sizeToScene();
-        return page;
-    }
-
-
 }

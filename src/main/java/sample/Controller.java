@@ -41,6 +41,7 @@ public class Controller {
     public String firstName;
     public String lastName;
     public Period currentPeriod;
+    public LocalDate date;
 
     //Application Resources
     @FXML
@@ -63,6 +64,7 @@ public class Controller {
     @FXML
     public void initialize() {
         photoPane.getStyleClass().add("photoPane");
+        date = LocalDate.now();
         setupComponents();
         setPeriod();
 
@@ -86,9 +88,12 @@ public class Controller {
         Timeline periodChecker = new Timeline(new KeyFrame(Duration.minutes(1), event -> {
             if (setPeriod()) {
                 List<SignIn> all = SignIn.find.all();
-                all.stream().filter(signIn1 -> signIn1.getTimeIn().toLocalTime().isAfter(currentPeriod.endTime)).forEach(signIn1 -> {
-                    signIn1.setTimeOut(LocalDateTime.from(LocalDate.from(currentPeriod.endTime)));
-                    signIn1.setWasManual(true);
+                all.stream().filter(signIn1 -> signIn1.getTimeIn().toLocalTime().equals(currentPeriod.endTime.minusMinutes(2))).forEach(signIn1 -> {
+                    if(signIn1.getTimeOut()== null){
+                        signIn1.setTimeOut(LocalDateTime.now());
+                        signIn1.setWasManual(true);
+                        signIn1.save();
+                    }
                 });
             }
         }));
@@ -122,15 +127,57 @@ public class Controller {
     }
 
     @FXML
-    public void loadPhotoPane() {
+    public void loadPhotoPane()  {
         File f = new File("/studentphotos/" + validInput + ".JPG");
-        if(f.isFile() && !f.isDirectory()) {
+        File f2 = new File("C:\\Users\\user\\textfilearea\\StudentPhotos" + validInput + ".JPG");
+        File f3 = new File("/studentphotos/");
+        boolean isFileReal;
+        isFileReal = checkDirForFile(f2);
+
+        if(isFileReal) {
             photoPane.setStyle("-fx-background-image: url(\"/studentphotos/" + validInput + ".JPG\");\n" +
                     "-fx-background-size: contain;");
-        } else {
+        } else if(!isFileReal) {
             photoPane.setStyle("-fx-background-image: url(\"/studentphotos/bealuser.JPG\");\n" +
                     "-fx-background-size: contain;\n" + "-fx-background-size: 180 225;");
+
         }
+    }
+
+    public static boolean checkDirForFile(File file){
+        File[] files = file.listFiles();
+        System.out.println("Can File Read:"+ file.canRead());
+        if(files!=null){
+            for (File filez : files) {
+                if (filez.isDirectory()) {
+                    System.out.println("Directory: " + file.getName());
+                } else {
+                    System.out.println("File: " + file.getName());
+                }
+            }
+
+        }
+
+          /*  File[] selectedFiles = file.listFiles((FileFilter) pathname -> {
+                System.out.println(pathname);
+                if (!(file.toString().equals(pathname.getName())) && isInteger(pathname.toString(),9)) return false ;
+                return true;
+            });
+        return false;*/
+
+       /* try {
+            Files.walk(file.toPath())
+                    .filter(p -> !p.getFileName()
+                            .toString().toLowerCase().endsWith(".JPG")).forEach(System.out::println);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;*/
+
+        /*if(isInteger(file.toString(),9)) return false;
+        return true;*/
+        return false;
     }
 
     @FXML
@@ -157,7 +204,7 @@ public class Controller {
         }
     }
 
-    private boolean isInteger(String s, int radix) {
+    public boolean isInteger(String s, int radix) {
         if (s.isEmpty()) return false;
         for (int i = 0; i < s.length(); i++) {
             if (i == 0 && s.charAt(i) == '-') {
@@ -189,7 +236,7 @@ public class Controller {
                     if (signIn == null || signIn.getTimeOut() != null) {
                         newLibrarySignIn(student);
                         signInUpdate();
-                    } else {
+                    } else if(signIn.getTimeOut() == null) {
                         signIn.setTimeOut(LocalDateTime.now());
                         signIn.save();
                         signOutUpdate();
