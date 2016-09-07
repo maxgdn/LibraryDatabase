@@ -21,10 +21,10 @@ public class DBToFileWriter {
     private static LocalDate currentTime = LocalDate.now();
     private static String folderName = "C:\\Users\\user\\textfilearea\\" + currentTime;
 
-    private static void initFolder(){
+    public static void initFolder(){
          new File(folderName).mkdir();
     }
-    private static void writeSignIns() throws IOException {
+    public static void writeSignIns() throws IOException {
         Counter counter = new Counter();
 
         String fileName = folderName +"\\" + "Sign In's on " + currentTime + ".txt";
